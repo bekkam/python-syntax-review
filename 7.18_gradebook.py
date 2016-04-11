@@ -19,35 +19,62 @@ class Gradebook(object):
     def get_minimum(self):
         """Find minimum grade"""
 
-        low_grade = self.grades[0][0]
+        # original:
+        # low_grade = self.grades[0][0]
 
-        for student, grade in enumerate(self.grades):
-            for grade in self.grades[student]:
-                if grade < low_grade:
-                    low_grade = grade
+        # for student, grade in enumerate(self.grades):
+        #     for grade in self.grades[student]:
+        #         if grade < low_grade:
+        #             low_grade = grade
+
+
+        # more pythonic:
+        # low_grade = self.grades[0][0]
+
+        # for row in self.grades:
+        #     if min(row) < low_grade:
+        #         low_grade = min(row)
+
+        # with list comprehension:
+        # low_grade = min([min(row) for row in self.grades])
+
+        # with generator-expression:
+        low_grade = min(min(row) for row in self.grades)
 
         return low_grade
 
     def get_maximum(self):
         """Find the maximum grade"""
 
-        high_grade = self.grades[0][0]
+        # original:
+        # high_grade = self.grades[0][0]
 
-        for student, grade in enumerate(self.grades):
-            for grade in self.grades[student]:
-                if grade > high_grade:
-                    high_grade = grade
+        # for student, grade in enumerate(self.grades):
+        #     for grade in self.grades[student]:
+        #         if grade > high_grade:
+        #             high_grade = grade
 
+        # more pythonic:
+        # for row in self.grades:
+        #     if max(row) > high_grade:
+        #         high_grade = max(row)
+
+        # with generator expression:
+        high_grade = max(max(row) for row in self.grades)
         return high_grade
 
     def get_average(self, r):
         """Determine average grade for test"""
 
+        # original:
         # initialize total to a float to retain float for average calculation
-        total = 0.00
+        # total = 0.00
 
-        for grade in self.grades[r]:
-            total += grade
+        # for grade in self.grades[r]:
+        #     total += grade
+
+        # concise:
+        total = float(sum(self.grades[r]))
 
         return total/(len(self.grades[r]))
 
@@ -59,9 +86,10 @@ class Gradebook(object):
         frequency = OrderedDict()
         frequency = {n: 0 for n in range(0, 11)}
 
+        # original:
         # for each student's grades
         # for each grade, increment appropriate frequency
-        for student, grades in enumerate(self.grades):
+        for grades in self.grades:
             for grade in grades:
                 frequency[grade/10] = frequency.get(grade/10) + 1
 
@@ -82,8 +110,8 @@ class Gradebook(object):
         print "            ",
 
         # create column heading for each of the tests
-        for index, test in enumerate(self.grades[0]):
-            print "Test %d  " % (index + 1),
+        for test in self.grades[0]:
+            print "Test %d  " % (test + 1),
         print "Average"
 
         # create rows/columns of text representing array grades
@@ -103,8 +131,8 @@ class Gradebook(object):
         self.output_grades()
 
         # Call methods get_maximum and get_minimum
-        print "\nLowest grade in grade book is %d" % self.get_maximum()
-        print "Highest grade in grade book is %d" % self.get_minimum()
+        print "\nHighest grade in grade book is %d" % self.get_maximum()
+        print "Lowest grade in grade book is %d" % self.get_minimum()
 
         self.output_bar_chart()
 
